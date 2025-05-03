@@ -8,7 +8,7 @@ import click
 from flask import current_app, g
 
 def init_app(app):
-  app.teardown_appcontext(clode_db)
+  app.teardown_appcontext(close_db)
   app.cli.add_command(init_db_command)
 
 '''
@@ -19,7 +19,7 @@ def init_db():
     db = get_db()
 
     with current_app.open_resource('events.sql') as f:
-      db.executescript(f.read().decode('utf-8'))
+      db.executescript(f.read().decode('utf8'))
 
 '''
 @usage: Use to access the database
@@ -38,7 +38,7 @@ def get_db():
 @usage: Use when shutting down the server
 @desc: Closes the database
 '''
-def clode_db(e=None):
+def close_db(e=None):
   db = g.pop('db', None)
 
   if db is not None:

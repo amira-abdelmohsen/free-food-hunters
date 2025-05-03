@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -69,19 +69,6 @@ def login():
             return render_template("login.html", error="Invalid credentials")
 
     return render_template("login.html")
-@app.route("/dashboard")
-def dashboard():
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    role = session.get("role")
-    if role == "organizer":
-        return render_template("dashboard_organizer.html", user=session["user"])
-    elif role == "student":
-        return render_template("dashboard_student.html", user=session["user"])
-    else:
-        return "Unauthorized", 403
-
 
 @app.route("/about")
 def about():
@@ -105,6 +92,5 @@ def register():
     return render_template("register.html", selected_role=role)
 
 
-db.init_app(app)
 if __name__ == "__main__":
     app.run(debug=True)
