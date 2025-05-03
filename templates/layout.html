@@ -38,9 +38,15 @@
   
       <!-- Right: Auth buttons -->
       <div class="d-flex gap-2">
-        <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
-        <a href="/register" class="btn btn-warning btn-sm text-dark">Sign up</a>
+        {% if session.email %}
+          <span class="text-white fw-semibold align-self-center">Welcome, {{ session.email.split('@')[0] }}</span>
+          <a href="/logout" class="btn btn-outline-light btn-sm">Log out</a>
+        {% else %}
+          <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
+          <a href="/register" class="btn btn-warning btn-sm text-dark">Sign up</a>
+        {% endif %}
       </div>
+
     </div>
   </nav>
   

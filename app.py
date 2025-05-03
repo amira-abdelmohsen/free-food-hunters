@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -55,20 +55,26 @@ def submit():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
+
+        # Enforce Hunter email domains
         valid_domains = ["@hunter.cuny.edu", "@myhunter.cuny.edu"]
-        email = request.form["email"]
         if not any(email.endswith(domain) for domain in valid_domains):
             return render_template("login.html", error="Please use your Hunter College email.")
-        # Replace with real user check if needed
-        if email == "admin@example.com" and password == "hunter123":
-            return redirect(url_for("submit"))  # 👈 redirect to submission form after login
+
+        # TODO: Dummy authentication logic (replace with real user from DB check later)
+        if email == "admin@myhunter.cuny.edu" and password == "hunter123":
+            session["email"] = email
+            session["role"] = "student"  # default to student, can be changed
+            return redirect(url_for("dashboard", role="student"))
         else:
             return render_template("login.html", error="Invalid credentials")
 
     return render_template("login.html")
+
 
 @app.route("/about")
 def about():
@@ -84,12 +90,39 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
 
-        # Simulate saving or pass to your DB logic
-        print(f"{role} registered: {name} ({email})")
+        # Email domain enforcement
+        valid_domains = ["@hunter.cuny.edu", "@myhunter.cuny.edu"]
+        if not any(email.endswith(domain) for domain in valid_domains):
+            return render_template("register.html", selected_role=role, error="Please use your Hunter College email.")
 
+        # TODO: Save to DB here
+
+        # Log the user in and redirect to their dashboard
+        session["email"] = email
+        session["role"] = role
+        return redirect(url_for("dashboard", role=role))
+    
+    return render_template("register.html", selected_role=role)
+
+@app.route("/dashboard")
+def dashboard():
+    if "email" not in session:
         return redirect(url_for("login"))
 
-    return render_template("register.html", selected_role=role)
+    role = request.args.get("role", session.get("role", "student"))  # fallback to session role
+    user = session.get("email", "Guest")
+
+    if role == "organizer":
+        return render_template("dashboard-organizer.html", user=user)
+    else:
+        return render_template("dashboard-student.html", user=user)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
+
 
 
 if __name__ == "__main__":
