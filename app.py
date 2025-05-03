@@ -1,6 +1,11 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_mapping(
+    SECRET_KEY = 'dev', # !!!OVER WRITE THIS TO A RANDOM KEY AT DEPLOYMENT!!!
+    DATABASE = os.path.join(app.instance_path, 'free-food-app.sqlite')
+)
 
 food_data = [{
         "title": "Leftover Pizza",
@@ -18,6 +23,15 @@ food_data = [{
         "lat": 40.7132,
         "lng": -74.0070
     }]  # Store food posts temporarily
+
+try:
+    os.makedirs(app.instance_path)
+except OSError:
+    pass
+
+
+import db
+db.init_app(app)
 
 @app.route("/")
 def home():
@@ -50,12 +64,9 @@ def login():
             return render_template("login.html", error="Invalid credentials")
 
     return render_template("login.html")
-
 @app.route("/about")
 def about():
     return render_template("about.html")
-
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -71,10 +82,6 @@ def register():
 
     return render_template("register.html")
 
-
-
-from . import db
-db.init_app(app)
 
 if __name__ == "__main__":
     app.run(debug=True)
