@@ -1,89 +1,60 @@
 {% extends "layout.html" %}
 
-{% block title %}Home - Free Food{% endblock %}
+{% block title %}Home - Free Food Finder{% endblock %}
 
 {% block content %}
-<!-- Your index.html content goes here -->
-<div id="map"></div>
-...
-{% endblock %}
-
-{% block scripts %}
-<!-- Your custom scripts like Google Maps API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjMRYVuwsMfJKxA0OAdpwBvtUkacAX7rM" async defer></script>
-<script>
-  // Your initMap() JS code here
-</script>
-{% endblock %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Free Food Finder</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    #map {
-      height: 400px;
-      width: 100%;
-    }
-  </style>
-</head>
-<body>
-  <nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-      <span class="navbar-brand mb-0 h1">🍕 Free Food Finder</span>
-    </div>
-  </nav>
-
-  <div class="container">
-    <!-- Map Section -->
-    <div id="map"></div>
-
-    <!-- Food Listings -->
-    <h2 class="mt-4">Available Food Nearby</h2>
-    <div class="row" id="food-list">
-      {% for event in food_events %}
-      <div class="col-md-6 mt-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ event.title }}</h5>
-            <p class="card-text">{{ event.description }}</p>
-            <p class="card-text"><strong>Location:</strong> {{ event.location }}</p>
-            <p class="card-text"><strong>Time Left:</strong> {{ event.time_remaining }}</p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
+<div class="row align-items-center hero-section">
+  <div class="col-lg-6 text-center text-lg-start">
+    <h1 class="display-4 fw-bold mb-3">
+      Reduce Food Waste on <span class="highlight">Campus</span>
+    </h1>
+    <p class="lead text-muted mb-4">
+      Connect event organizers with leftover food to hungry students. Reduce waste and feed the community.
+    </p>
+    <div class="d-flex justify-content-center justify-content-lg-start">
+      <a href="/submit" class="btn btn-primary btn-lg me-3">Get Started</a>
+      <a href="/about" class="btn btn-outline-secondary btn-lg">Learn More</a>
     </div>
   </div>
+  <div class="col-lg-6 text-center">
+    <img src="{{ url_for('static', filename='image/lily-banse--YHSwy6uqvk-unsplash.jpg') }}"
+     alt="Food image"
+     class="img-fluid rounded shadow">
 
-  <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjMRYVuwsMfJKxA0OAdpwBvtUkacAX7rM" async defer></script>
-  
-  <script>
-    function initMap() {
-      const center = { lat: 40.7128, lng: -74.0060 }; // Default to NYC
-      const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 14,
-        center: center,
-      });
-      const foodEvents = { food_events_json , tojson , safe };
+  </div>
+  <!-- How It Works Section -->
+<section class="how-it-works py-5 bg-white">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-5">How It Works</h2>
+    <div class="row g-4">
+      <!-- Step 1 -->
+      <div class="col-md-4">
+        <div class="step-number">1</div>
+        <h5 class="fw-bold mt-3">Event Organizers</h5>
+        <p class="text-muted">
+          Register as an organizer and create listings for leftover food from your events.
+        </p>
+      </div>
+      <!-- Step 2 -->
+      <div class="col-md-4">
+        <div class="step-number">2</div>
+        <h5 class="fw-bold mt-3">Students</h5>
+        <p class="text-muted">
+          Register as a student to view and receive notifications about available food.
+        </p>
+      </div>
+      <!-- Step 3 -->
+      <div class="col-md-4">
+        <div class="step-number">3</div>
+        <h5 class="fw-bold mt-3">Reduce Waste</h5>
+        <p class="text-muted">
+          Connect and help reduce food waste while feeding the campus community.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+{% endblock %}
 
 
-      foodEvents.forEach(event => {
-        const marker = new google.maps.Marker({
-          position: { lat: event.lat, lng: event.lng },
-          map: map,
-          title: event.title
-        });
-      });
-    }
-  </script>
-
-  <!-- Bootstrap Bundle JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

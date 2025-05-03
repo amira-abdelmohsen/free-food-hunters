@@ -8,12 +8,12 @@
 <form method="POST" action="/submit" class="needs-validation" novalidate>
   <div class="mb-3">
     <label for="title" class="form-label">Food Title</label>
-    <input type="text" class="form-control" id="title" name="title" placeholder="e.g. Leftover Pizza" required>
+    <input type="text" class="form-control" id="title" name="title" placeholder="e.g. Extra Pizza from Club Meeting" required>
   </div>
 
   <div class="mb-3">
     <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Details about the food and quantity..." required></textarea>
+    <textarea class="form-control" id="description" name="description" rows="3" placeholder="e.g. 4 boxes of cheese pizza left. Still warm!" required></textarea>
   </div>
 
   <div class="mb-3">
@@ -32,8 +32,8 @@
   </div>
 
   <div class="mb-3">
-    <label for="time_remaining" class="form-label">Time Left (e.g. 30 mins)</label>
-    <input type="text" class="form-control" id="time_remaining" name="time_remaining" required>
+    <label for="time_remaining" class="form-label">Time Left</label>
+    <input type="text" class="form-control" id="time_remaining" name="time_remaining" placeholder="e.g. 30 mins" required>
   </div>
 
   <button type="submit" class="btn btn-primary">Submit</button>
