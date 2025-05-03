@@ -3,71 +3,63 @@
 {% block title %}Home - Free Food Finder{% endblock %}
 
 {% block content %}
-<div class="row align-items-center hero-section">
-  <div class="col-lg-6 text-center text-lg-start">
-    <h1 class="display-4 fw-bold mb-3">
-      Reduce Food Waste on <span class="highlight">Campus</span>
-    </h1>
-    <p class="lead text-muted mb-4">
-      Connect event organizers with leftover food to hungry students. Reduce waste and feed the community.
-    </p>
-    <div class="d-flex justify-content-center justify-content-lg-start">
-      <div class="d-flex gap-3">
-        <a href="/login" class="btn btn-primary">Get Started</a>
-        <a href="/about" class="btn btn-outline-secondary">Learn More</a>
-      </div>      
+<!-- Hero Section -->
+<section class="bg-light py-5 text-center text-md-start">
+  <div class="container d-flex flex-column flex-md-row align-items-center">
+    <div class="me-md-5 mb-4 mb-md-0" style="max-width: 600px;">
+      <h1 class="display-5 fw-bold">Reduce Food Waste on <span class="text-warning">Campus</span></h1>
+      <p class="lead text-muted">
+        Connect event organizers with leftover food to hungry students. Reduce waste and feed the community.
+      </p>
+      <div class="d-flex gap-3 mt-4">
+        <a href="{{ url_for('login') }}" class="btn btn-warning btn-lg shadow-sm">Get Started</a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">Learn More</a>
+      </div>
     </div>
-  </div>
-  <div class="col-lg-6 text-center">
     <img src="{{ url_for('static', filename='image/lily-banse--YHSwy6uqvk-unsplash.jpg') }}"
-     alt="Food image"
-     class="img-fluid rounded shadow">
-
+         class="img-fluid rounded shadow-sm" alt="Food Image" style="max-width: 500px;">
   </div>
-  <!-- How It Works Section -->
-<section class="how-it-works py-5 bg-white">
-  <div class="container text-center">
+</section>
+
+<!-- How It Works Section -->
+<section class="bg-white py-5 text-center">
+  <div class="container">
     <h2 class="fw-bold mb-5">How It Works</h2>
     <div class="row g-4">
-      <!-- Step 1 -->
       <div class="col-md-4">
-        <div class="step-number">1</div>
-        <h5 class="fw-bold mt-3">Event Organizers</h5>
-        <p class="text-muted">
-          Register as an organizer and create listings for leftover food from your events.
-        </p>
+        <div class="p-4">
+          <div class="bg-warning rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 24px;">1</div>
+          <h5 class="fw-semibold">Event Organizers</h5>
+          <p class="text-muted">Create listings for leftover food after your events.</p>
+        </div>
       </div>
-      <!-- Step 2 -->
       <div class="col-md-4">
-        <div class="step-number">2</div>
-        <h5 class="fw-bold mt-3">Students</h5>
-        <p class="text-muted">
-          Register as a student to view and receive notifications about available food.
-        </p>
+        <div class="p-4">
+          <div class="bg-warning rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 24px;">2</div>
+          <h5 class="fw-semibold">Students</h5>
+          <p class="text-muted">Sign up to view and get alerts for free food nearby.</p>
+        </div>
       </div>
-      <!-- Step 3 -->
       <div class="col-md-4">
-        <div class="step-number">3</div>
-        <h5 class="fw-bold mt-3">Reduce Waste</h5>
-        <p class="text-muted">
-          Connect and help reduce food waste while feeding the campus community.
-        </p>
+        <div class="p-4">
+          <div class="bg-warning rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 24px;">3</div>
+          <h5 class="fw-semibold">Reduce Waste</h5>
+          <p class="text-muted">Help feed the community and minimize food waste.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
-<!-- Call to Action Section -->
-<section class="cta-section text-white text-center py-5">
+
+<!-- Call to Action -->
+<section class="bg-warning text-white py-5 text-center">
   <div class="container">
-    <h2 class="fw-bold mb-3">Join the Campus Food Sharing Community</h2>
-    <p class="lead mb-4">
-      Whether you're an event organizer with leftover food or a student looking for a free meal,<br>
-      we've got you covered.
-    </p>
-      
-    </div>
+    <h3 class="fw-bold mb-3">Join the Campus Food Sharing Community</h3>
+    <p class="lead mb-4">Whether you're an event organizer or a student, we’ve got you covered.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
   </div>
 </section>
+
 
 <!-- Footer -->
 <footer class="footer-section text-center text-white py-3">
