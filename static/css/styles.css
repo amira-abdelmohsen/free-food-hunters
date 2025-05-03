@@ -111,4 +111,33 @@ body {
     background-color: #e76b00;
     border-color: #e76b00;
   }
-    
+  .cta-section {
+    background-color: #ff7a00; /* vibrant orange */
+  }
+  
+  .cta-section .btn-light {
+    font-weight: 500;
+    background-color: #fff;
+    color: #ff7a00;
+    border: none;
+    border-radius: 10px;
+  }
+  
+  .cta-section .btn-outline-light {
+    font-weight: 500;
+    color: #fff;
+    border: 2px solid #fff;
+    background-color: transparent;
+    border-radius: 10px;
+  }
+  
+  .cta-section .btn-outline-light:hover {
+    background-color: #fff;
+    color: #ff7a00;
+  }
+  
+  .footer-section {
+    background-color: #2c2c2c;
+    font-size: 0.95rem;
+  }
+   

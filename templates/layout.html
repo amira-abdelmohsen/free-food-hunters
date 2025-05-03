@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Free Food Finder{% endblock %}</title>
@@ -16,11 +17,16 @@
 
   {% block head %}{% endblock %}
 </head>
+
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="nav-link text-white" href="/login">Login</a>
+      <a class="nav-link text-white" href="/">Home</a>
+      <a class="nav-link text-white" href="/about">About</a>
+      <a class="btn btn-outline-light me-2" href="/login">Log in</a>
+      <a class="btn btn-warning" href="/register">Sign up</a>
+
       <a class="navbar-brand" href="/">🍕 Free Food Finder</a>
     </div>
   </nav>
@@ -38,4 +44,5 @@
 
   {% block scripts %}{% endblock %}
 </body>
+
 </html>
