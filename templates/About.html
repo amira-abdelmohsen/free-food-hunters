@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}About Us - Free Food Finder{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row justify-content-center text-center mb-5">
+      <div class="col-lg-8">
+        <h1 class="fw-bold">About Free Food Finder</h1>
+        <p class="lead text-muted mt-3">
+          We're on a mission to reduce food waste on campuses by connecting event organizers with students in real time.
+        </p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <h4 class="fw-semibold">🍽️ Our Vision</h4>
+        <p class="text-muted">
+          Millions of pounds of food are wasted every year on college campuses. Meanwhile, students often skip meals due to cost or access. Free Food Finder bridges this gap by helping ensure no good food goes to waste.
+        </p>
+      </div>
+      <div class="col-md-6">
+        <h4 class="fw-semibold">🤝 Our Impact</h4>
+        <p class="text-muted">
+          Since our launch, we've helped dozens of student organizations share leftover food with hundreds of students. It's more than food — it's about building community and sustainability.
+        </p>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col text-center">
+        <h4 class="fw-semibold mb-3">📬 Want to get involved?</h4>
+        <p class="text-muted mb-4">Whether you're an organizer, a student, or just passionate about reducing waste, we're excited to have you join us.</p>
+        <a href="/register" class="btn btn-primary btn-lg">Sign Up Today</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

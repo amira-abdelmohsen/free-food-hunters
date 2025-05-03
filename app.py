@@ -43,13 +43,34 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
 
-        # Add your real authentication logic here
+        # Replace with real user check if needed
         if email == "admin@example.com" and password == "hunter123":
-            return redirect(url_for("home"))
+            return redirect(url_for("submit"))  # 👈 redirect to submission form after login
         else:
             return render_template("login.html", error="Invalid credentials")
 
     return render_template("login.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        role = request.form["role"]
+        name = request.form["name"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        # TODO: save to database / authentication system
+        print(f"New {role} registered: {name}, {email}")
+
+        return redirect(url_for("home"))
+
+    return render_template("register.html")
+
 
 
 if __name__ == "__main__":

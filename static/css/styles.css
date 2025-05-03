@@ -140,4 +140,31 @@ body {
     background-color: #2c2c2c;
     font-size: 0.95rem;
   }
-   
+  .navbar-brand img {
+    object-fit: cover;
+  }
+  h1, h4 {
+    color: #2b2b2b;
+  }
+  
+  .btn-primary {
+    background-color: #ff7a00;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #e86e00;
+  }
+  form select, form input {
+    border-radius: 0.4rem;
+  }
+  
+  form button {
+    background-color: #ff7a00;
+    border: none;
+  }
+  
+  form button:hover {
+    background-color: #e86e00;
+  }
+         

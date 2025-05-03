@@ -20,17 +20,30 @@
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="nav-link text-white" href="/">Home</a>
-      <a class="nav-link text-white" href="/about">About</a>
-      <a class="btn btn-outline-light me-2" href="/login">Log in</a>
-      <a class="btn btn-warning" href="/register">Sign up</a>
-
-      <a class="navbar-brand" href="/">🍕 Free Food Finder</a>
+  <nav class="navbar navbar-expand-lg" style="background-color: #FF6B6B;">
+    <div class="container">
+      <!-- Left: Brand -->
+      <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-bold" href="/">
+        <img src="{{ url_for('static', filename='image/Food.png') }}" alt="Logo" width="36" height="36" style="object-fit: cover;">
+        Free Food Finder
+      </a>
+      
+      
+  
+      <!-- Center: Links -->
+      <div class="mx-auto d-flex gap-3">
+        <a class="nav-link text-white fw-semibold" href="/">Home</a>
+        <a class="nav-link text-white fw-semibold" href="/about">About</a>
+      </div>
+  
+      <!-- Right: Auth buttons -->
+      <div class="d-flex gap-2">
+        <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
+        <a href="/register" class="btn btn-warning btn-sm text-dark">Sign up</a>
+      </div>
     </div>
   </nav>
-
+  
   <!-- Main Content -->
   <div class="container my-4">
     {% block content %}{% endblock %}
