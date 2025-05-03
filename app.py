@@ -89,19 +89,39 @@ def register():
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
+        database = db.get_db()
+        error = None
 
         # Email domain enforcement
         valid_domains = ["@hunter.cuny.edu", "@myhunter.cuny.edu"]
         if not any(email.endswith(domain) for domain in valid_domains):
             return render_template("register.html", selected_role=role, error="Please use your Hunter College email.")
 
+        if not name:
+            error = "Name is required."
+        elif not password:
+            error = "Password required."
         # TODO: Save to DB here
 
         # Log the user in and redirect to their dashboard
         session["email"] = email
         session["role"] = role
         return redirect(url_for("dashboard", role=role))
-    
+
+        if error is None:
+            try:
+                database.execute(
+                    "INSERT INTO user (urole, uname, pass) VALUES (?, ?, ?)",
+                    (role, name, password),
+                )
+                database.commit()
+            except database.IntegrityError:
+                error = f"User {name} is already registered."
+            else:
+                return redirect(url_for("login"))
+        
+        #flash(error)
+
     return render_template("register.html", selected_role=role)
 
 @app.route("/dashboard")
