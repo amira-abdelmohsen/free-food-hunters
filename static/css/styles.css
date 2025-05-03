@@ -167,4 +167,35 @@ body {
   form button:hover {
     background-color: #e86e00;
   }
+  /* Make sure html and body stretch full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #d6eaf8, #e3f2fd);
+}
+
+/* Fullscreen background container */
+.fullscreen-bg {
+  background: url('/static/image/bg.jpg') no-repeat center center;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Optional: glass effect on card */
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+}
+
+  
+  
+
   
