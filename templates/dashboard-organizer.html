@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2>Welcome, {{ user }} (Organizer)</h2>
+<a href="{{ url_for('dashboard', role='student') }}" class="btn btn-outline-success">Switch to Student View</a>
 <p>Here you can post food events and manage listings.</p>
 <a href="/submit" class="btn btn-primary">Add New Food Listing</a>
 {% endblock %}
