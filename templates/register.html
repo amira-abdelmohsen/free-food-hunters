@@ -12,10 +12,10 @@
         <div class="mb-3">
           <label for="role" class="form-label">Register As</label>
           <select id="role" name="role" class="form-select" required>
-            <option value="" disabled selected>Select role</option>
-            <option value="organizer">Event Organizer</option>
-            <option value="student">Student</option>
-          </select>
+            <option value="" disabled {% if not selected_role %}selected{% endif %}>Select role</option>
+            <option value="organizer" {% if selected_role == 'organizer' %}selected{% endif %}>Event Organizer</option>
+            <option value="student" {% if selected_role == 'student' %}selected{% endif %}>Student</option>
+          </select>          
         </div>
 
         <div class="mb-3">

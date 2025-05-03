@@ -85,18 +85,21 @@ def about():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    role = request.args.get("role")  # from URL query param like ?role=organizer
+
     if request.method == "POST":
         role = request.form["role"]
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
 
-        # TODO: save to database / authentication system
-        print(f"New {role} registered: {name}, {email}")
+        # Simulate saving or pass to your DB logic
+        print(f"{role} registered: {name} ({email})")
 
-        return redirect(url_for("home"))
+        return redirect(url_for("login"))
 
-    return render_template("register.html")
+    return render_template("register.html", selected_role=role)
+
 
 db.init_app(app)
 if __name__ == "__main__":
