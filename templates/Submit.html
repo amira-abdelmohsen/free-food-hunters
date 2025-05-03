@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Submit Leftover Food{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Submit Leftover Food</h2>
+
+<form method="POST" action="/submit" class="needs-validation" novalidate>
+  <div class="mb-3">
+    <label for="title" class="form-label">Food Title</label>
+    <input type="text" class="form-control" id="title" name="title" placeholder="e.g. Leftover Pizza" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Details about the food and quantity..." required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="location" class="form-label">Location</label>
+    <input type="text" class="form-control" id="location" name="location" placeholder="e.g. Room 204, Science Building" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="lat" class="form-label">Latitude</label>
+    <input type="number" class="form-control" id="lat" name="lat" step="any" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="lng" class="form-label">Longitude</label>
+    <input type="number" class="form-control" id="lng" name="lng" step="any" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="time_remaining" class="form-label">Time Left (e.g. 30 mins)</label>
+    <input type="text" class="form-control" id="time_remaining" name="time_remaining" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
