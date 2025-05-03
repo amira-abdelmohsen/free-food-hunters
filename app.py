@@ -51,12 +51,17 @@ def submit():
         food_data.append(new_event)
         return redirect(url_for("home"))
     return render_template("submit.html")
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-
+        valid_domains = ["@hunter.cuny.edu", "@myhunter.cuny.edu"]
+        email = request.form["email"]
+        if not any(email.endswith(domain) for domain in valid_domains):
+            return render_template("login.html", error="Please use your Hunter College email.")
         # Replace with real user check if needed
         if email == "admin@example.com" and password == "hunter123":
             return redirect(url_for("submit"))  # 👈 redirect to submission form after login
@@ -86,7 +91,6 @@ def about():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     role = request.args.get("role")  # from URL query param like ?role=organizer
-
     if request.method == "POST":
         role = request.form["role"]
         name = request.form["name"]
