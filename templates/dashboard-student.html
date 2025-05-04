@@ -1,7 +1,57 @@
+<!-- student_dashboard.html -->
 {% extends "layout.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
 {% block content %}
-<h2>Welcome, {{ user }} (Student)</h2>
-<a href="{{ url_for('dashboard', role='organizer') }}" class="btn btn-outline-primary">Switch to Organizer View</a>
-<p>Check out available free food on campus!</p>
-<a href="/" class="btn btn-success">Browse Food Map</a>
+<div class="container mt-4">
+  <h2>Welcome, {{ user.name }} 👋</h2>
+  <p class="lead">Here's your event feed. Stay updated with new food events!</p>
+
+  <div id="notifications" class="alert alert-info" style="display: none;"></div>
+
+  <ul class="list-group" id="event-list">
+    <!-- Dummy events will be injected here -->
+  </ul>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Dummy events - replace this with a fetch to backend DB in future
+  const dummyEvents = [
+    {
+      title: "Pizza Party in Room 204 🍕",
+      description: "5 boxes of leftover cheese pizza!",
+      location: "TH 204, Thomas Hunter Building",
+      time: "15 mins ago"
+    },
+    {
+      title: "Snacks from CS Meetup 🥨",
+      description: "Granola bars and soda available!",
+      location: "Library 3rd Floor",
+      time: "10 mins ago"
+    }
+  ];
+
+  // Display the dummy events
+  const eventList = document.getElementById('event-list');
+
+  dummyEvents.forEach(event => {
+    const item = document.createElement('li');
+    item.className = 'list-group-item';
+    item.innerHTML = `<strong>${event.title}</strong><br>
+                      <small>${event.description}</small><br>
+                      <em>${event.location}</em><br>
+                      <span class="text-muted">Posted ${event.time}</span>`;
+    eventList.appendChild(item);
+  });
+
+  // Notification logic
+  const notification = document.getElementById('notifications');
+  if (dummyEvents.length > 0) {
+    notification.style.display = 'block';
+    notification.textContent = `🔔 You have ${dummyEvents.length} new event notification${dummyEvents.length > 1 ? 's' : ''}`;
+  }
+</script>
 {% endblock %}
