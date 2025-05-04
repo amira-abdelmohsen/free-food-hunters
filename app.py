@@ -10,12 +10,14 @@ app.config.from_mapping(
     DATABASE=os.path.join(app.instance_path, 'free-food-app.sqlite')
 )
 
-try:
-    os.makedirs(app.instance_path)
-except OSError:
-    pass
+# Ensure database exists on first run
 
-db.init_app(app)
+os.makedirs(app.instance_path, exist_ok=True)
+db_path = app.config["DATABASE"]
+if not os.path.exists(db_path):
+    with app.app_context():
+        db.init_db()
+
 
 @app.template_filter("datetimeformat")
 def datetimeformat(value, format="%I:%M %p"):

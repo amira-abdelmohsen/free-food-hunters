@@ -2,6 +2,7 @@
 Database storing the events created by the app
 '''
 import sqlite3
+import os
 from datetime import datetime
 
 import click
@@ -16,6 +17,14 @@ def init_db():
     with current_app.open_resource('events.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
+# def get_db():
+#     if 'db' not in g:
+#         g.db = sqlite3.connect(
+#             current_app.config['DATABASE'],
+#             detect_types=sqlite3.PARSE_DECLTYPES
+#         )
+#         g.db.row_factory = sqlite3.Row
+#     return g.db
 def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect(
@@ -24,6 +33,9 @@ def get_db():
         )
         g.db.row_factory = sqlite3.Row
     return g.db
+
+
+
 
 # def close_db(e=None):
 #     db = g.pop('db', None)
