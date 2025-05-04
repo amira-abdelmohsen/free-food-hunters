@@ -1,5 +1,5 @@
 '''
-Database storing the events created by the app
+Database interface and definition to store events and login information created by the app
 '''
 import sqlite3
 import os
