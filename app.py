@@ -3,6 +3,14 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
 import db
 from db import insert_user
+import ssl
+import certifi
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from dotenv import load_dotenv
+from twilio.rest import Client
+load_dotenv()
+
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -10,12 +18,14 @@ app.config.from_mapping(
     DATABASE=os.path.join(app.instance_path, 'free-food-app.sqlite')
 )
 
-try:
-    os.makedirs(app.instance_path)
-except OSError:
-    pass
+# Ensure database exists on first run
 
-db.init_app(app)
+os.makedirs(app.instance_path, exist_ok=True)
+db_path = app.config["DATABASE"]
+if not os.path.exists(db_path):
+    with app.app_context():
+        db.init_db()
+
 
 @app.template_filter("datetimeformat")
 def datetimeformat(value, format="%I:%M %p"):
@@ -74,14 +84,20 @@ def login():
         if "email" in session:
             return redirect(url_for("dashboard", role=session.get("role")))
 
-        if email == "admin@myhunter.cuny.edu" and password == "hunter123":
-            session["email"] = email
-            session["role"] = "student"
-            return redirect(url_for("dashboard", role="student"))
+        db_conn = db.get_db()
+        user = db_conn.execute(
+            "SELECT * FROM user WHERE email = ? AND password = ?", (email, password)
+        ).fetchone()
+
+        if user:
+            session["email"] = user["email"]
+            session["role"] = request.form.get("role", "student")  # fallback
+            return redirect(url_for("dashboard", role=session["role"]))
         else:
-            return render_template("login.html", error="Invalid credentials")
+            return render_template("login.html", error="Invalid email or password.")
 
     return render_template("login.html")
+
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -165,6 +181,40 @@ def debug_events():
     from db import get_all_events
     events = get_all_events()
     return f"Found {len(events)} events:<br><br>" + "<br>".join([f"{e['title']} — {e['pickup_time']} to {e['pickup_end']}" for e in events])
+
+
+
+@app.route("/subscribe", methods=["POST"])
+def subscribe():
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    user_email = session["email"]
+
+    try:
+        client = Client(
+            os.environ["TWILIO_ACCOUNT_SID"],
+            os.environ["TWILIO_AUTH_TOKEN"]
+        )
+
+        verification = client.verify.v2.services(
+            os.environ["TWILIO_VERIFY_SERVICE_SID"]
+        ).verifications.create(
+            channel="email",
+            to=user_email
+        )
+
+        print("Verification SID:", verification.sid)
+        print("Verification Status:", verification.status)
+        return redirect(url_for("dashboard", role="student", subscribed="true"))
+
+    except Exception as e:
+        print("Twilio error:", str(e))
+        return redirect(url_for("dashboard", role="student", error="true"))
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
