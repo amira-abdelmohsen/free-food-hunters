@@ -51,6 +51,7 @@ def submit():
 
     return render_template("submit.html")
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -61,14 +62,20 @@ def login():
         if not any(email.endswith(domain) for domain in valid_domains):
             return render_template("login.html", error="Please use your Hunter College email.")
 
-        if email == "admin@myhunter.cuny.edu" and password == "hunter123":
-            session["email"] = email
-            session["role"] = "student"
-            return redirect(url_for("dashboard", role="student"))
+        db_conn = db.get_db()
+        user = db_conn.execute(
+            "SELECT * FROM user WHERE email = ? AND password = ?", (email, password)
+        ).fetchone()
+
+        if user:
+            session["email"] = user["email"]
+            session["role"] = request.form.get("role", "student")  # fallback
+            return redirect(url_for("dashboard", role=session["role"]))
         else:
-            return render_template("login.html", error="Invalid credentials")
+            return render_template("login.html", error="Invalid email or password.")
 
     return render_template("login.html")
+
 
 
 @app.route("/register", methods=["GET", "POST"])
