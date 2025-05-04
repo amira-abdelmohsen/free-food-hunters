@@ -1,29 +1,43 @@
-function initMap() {
-    const center = { lat: 40.7128, lng: -74.0060 }; // Default center (New York City)
-    
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 14,
-      center: center,
-    });
-  
-    if (Array.isArray(foodEvents)) {
-      foodEvents.forEach(event => {
-        const marker = new google.maps.Marker({
-          position: { lat: event.lat, lng: event.lng },
-          map: map,
-          title: event.title,
-        });
-  
-        const infoWindow = new google.maps.InfoWindow({
-          content: `<strong>${event.title}</strong><br>${event.description}<br><em>${event.location}</em>`,
-        });
-  
-        marker.addListener("click", () => {
-          infoWindow.open(map, marker);
-        });
-      });
-    } else {
-      console.warn("foodEvents is not an array");
+function startCountdowns() {
+  const countdowns = document.querySelectorAll(".countdown");
+
+  countdowns.forEach(el => {
+    const endTimeStr = el.dataset.end;
+
+    if (!endTimeStr) {
+      el.textContent = "Unknown";
+      return;
     }
-  }
-  
+
+    const [hours, minutes] = endTimeStr.split(":").map(Number);
+    const now = new Date();
+    const expiresAt = new Date(now);
+    expiresAt.setHours(hours, minutes, 0, 0);
+
+    // If pickup_end is earlier than current time (e.g., posted yesterday), assume it's tomorrow
+    if (expiresAt < now) {
+      expiresAt.setDate(now.getDate() + 1);
+    }
+
+    function update() {
+      const now = new Date();
+      const remaining = expiresAt - now;
+
+      if (remaining <= 0) {
+        el.textContent = "Expired";
+        el.classList.add("text-danger");
+        return;
+      }
+
+      const mins = Math.floor(remaining / 60000);
+      const secs = Math.floor((remaining % 60000) / 1000);
+      el.textContent = `${mins}m ${secs < 10 ? "0" : ""}${secs}s`;
+      el.classList.remove("text-danger");
+    }
+
+    update();
+    setInterval(update, 1000);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", startCountdowns);
