@@ -52,3 +52,79 @@ def init_db_command():
 sqlite3.register_converter(
   "timestamp", lambda v:datetime.fromisoformat(v.decode())
 )
+
+def insert_event(data):
+    db = get_db()
+    db.execute("""
+        INSERT INTO events (author_email, title, description, location, pickup_time, time_remaining, allergies)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (
+        data["author_email"],
+        data["title"],
+        data["description"],
+        data["location"],
+        data["pickup_time"],
+        data["time_remaining"],
+        data["allergies"]
+    ))
+    db.commit()
+
+def get_events_by_author(email):
+    db = get_db()
+    return db.execute("SELECT * FROM events WHERE author_email = ?", (email,)).fetchall()
+
+def delete_event(event_id):
+    db = get_db()
+    db.execute("DELETE FROM events WHERE id = ?", (event_id,))
+    db.commit()
+
+from datetime import timedelta
+
+def delete_expired_events():
+    db = get_db()
+    now = datetime.now()
+    rows = db.execute("SELECT id, created_at, time_remaining FROM events").fetchall()
+
+    for row in rows:
+        try:
+            created = row["created_at"] if isinstance(row["created_at"], datetime) else datetime.fromisoformat(str(row["created_at"]))
+            delta = parse_time_remaining(row["time_remaining"])
+            if created + delta <= now:
+                db.execute("DELETE FROM events WHERE id = ?", (row["id"],))
+        except Exception as e:
+            print(f"Skipping invalid event {row['id']}: {e}")
+
+    db.commit()
+
+def parse_time_remaining(text):
+    text = text.lower().strip()
+    if "hour" in text:
+        return timedelta(hours=int(text.split()[0]))
+    elif "min" in text:
+        return timedelta(minutes=int(text.split()[0]))
+    return timedelta(minutes=30)  # fallback default
+
+# def get_all_events():
+#     db = get_db()
+#     return db.execute("""
+#         SELECT e.*, u.name AS author_name 
+#         FROM events e
+#         JOIN user u ON e.author_email = u.email
+#     """).fetchall()
+def get_all_events():
+    db = get_db()
+    return db.execute("""
+        SELECT e.*, u.name AS author_name, u.email AS author_email
+        FROM events e
+        LEFT JOIN user u ON e.author_email = u.email
+        ORDER BY e.created_at DESC
+    """).fetchall()
+
+
+def insert_user(user):
+    db = get_db()
+    db.execute("""
+        INSERT OR IGNORE INTO user (email, name, password)
+        VALUES (?, ?, ?)
+    """, (user["email"], user["name"], user["password"]))
+    db.commit()

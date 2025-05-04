@@ -2,16 +2,20 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS events;
 
 CREATE TABLE user (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  organizer BOOLEAN NOT NULL CHECK,
-  uname TEXT UNIQUE NOT NULL,
-  pass TEXT NOT NULL
+  email TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  password TEXT NOT NULL
 );
 
 CREATE TABLE events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER NOT NULL,
+  author_email TEXT NOT NULL,
   title TEXT NOT NULL,
-  body TEXT NOT NULL,
-  locat TEXT NOT NULL,
-)
+  description TEXT NOT NULL,
+  location TEXT NOT NULL,
+  pickup_time TEXT NOT NULL,
+  time_remaining TEXT NOT NULL,
+  allergies TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (author_email) REFERENCES user(email)
+);
