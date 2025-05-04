@@ -1,5 +1,5 @@
 '''
-Database storing the events created by the app
+Database interface and definition to store events and login information created by the app
 '''
 import sqlite3
 import os
@@ -8,10 +8,12 @@ from datetime import datetime
 import click
 from flask import current_app, g
 
+# Call this function when initializing the app to initialize the database and give it a propare set up
 def init_app(app):
     # app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
 
+# helper function for initialization
 def init_db():
     db = get_db()
     with current_app.open_resource('events.sql') as f:
@@ -25,6 +27,8 @@ def init_db():
 #         )
 #         g.db.row_factory = sqlite3.Row
 #     return g.db
+
+# use this function whenever accessing the database
 def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect(
@@ -42,6 +46,14 @@ def get_db():
 #     if db is not None:
 #         db.close()
 
+
+# In the case database should be deleted, uncomment
+# def close_db(e=None):
+#     db = g.pop('db', None)
+#     if db is not None:
+#         db.close()
+
+# cli database creation
 @click.command('init-db')
 def init_db_command():
     init_db()
@@ -51,6 +63,7 @@ sqlite3.register_converter(
     "timestamp", lambda v: datetime.fromisoformat(v.decode())
 )
 
+# Adds event onto database
 def insert_event(data):
     db = get_db()
     db.execute("""
@@ -67,15 +80,20 @@ def insert_event(data):
     ))
     db.commit()
 
+# Access events by a specific author
+#   email - text form of the email that is used to look up in database
 def get_events_by_author(email):
     db = get_db()
     return db.execute("SELECT * FROM events WHERE author_email = ?", (email,)).fetchall()
 
+# Remove event by id from database
+#   id - unique number to a created event in the database
 def delete_event(event_id):
     db = get_db()
     db.execute("DELETE FROM events WHERE id = ?", (event_id,))
     db.commit()
 
+# Automatic deletion of expired events. Event is expired if the given timeframe on creation is passed
 def delete_expired_events():
     db = get_db()
     now = datetime.now()
@@ -94,6 +112,7 @@ def delete_expired_events():
 
     db.commit()
 
+# Access all events in database. Used to show events on dashboard
 def get_all_events():
     db = get_db()
     return db.execute("""
@@ -103,6 +122,7 @@ def get_all_events():
         ORDER BY e.created_at DESC
     """).fetchall()
 
+# Insert user into the database on registration
 def insert_user(user):
     db = get_db()
     db.execute("""
