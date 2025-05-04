@@ -2,23 +2,36 @@
 
 {% block title %}Home - Free Food Finder{% endblock %}
 
+{% block head %}
+  <!-- Bootstrap Icons (Optional) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    @media (max-width: 768px) {
+      .btn-lg {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
-<section class="bg-light py-5 text-center text-md-start">
+<section class="py-5 text-center text-md-start" style="background: linear-gradient(135deg, #fffbe6, #fceabb);">
   <div class="container d-flex flex-column flex-md-row align-items-center">
     <div class="me-md-5 mb-4 mb-md-0" style="max-width: 600px;">
       <h1 class="display-5 fw-bold">Reduce Food Waste on <span class="text-warning">Campus</span></h1>
       <p class="lead text-muted">
         Connect event organizers with leftover food to hungry students. Reduce waste and feed the community.
       </p>
-      <div class="mt-4 d-flex gap-3">
-        <a href="{{ url_for('dashboard') if 'email' in session else url_for('login') }}" class="btn btn-warning btn-lg">
-          Get Started
-        </a>
-        <a href="{{ url_for('dashboard') if 'email' in session else url_for('login') }}" class="btn btn-outline-secondary btn-lg">
-          Learn More
-        </a>
-      </div>      
+      <div class="d-flex gap-3 mt-4 flex-wrap">
+        <a href="/dashboard" class="btn btn-warning btn-lg shadow-sm px-4">Get Started</a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">Learn More</a>
+      </div>
+    </div>
+    <img src="{{ url_for('static', filename='image/lily-banse--YHSwy6uqvk-unsplash.jpg') }}"
+         class="img-fluid rounded-4 shadow-lg" alt="Food Image" style="max-width: 500px;">
+  </div>
 </section>
 
 <!-- How It Works Section -->
@@ -28,21 +41,24 @@
     <div class="row g-4">
       <div class="col-md-4">
         <div class="p-4">
-          <div class="bg-warning rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 24px;">1</div>
+          <div class="bg-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow"
+               style="width: 80px; height: 80px; font-size: 24px;">1</div>
           <h5 class="fw-semibold">Event Organizers</h5>
           <p class="text-muted">Create listings for leftover food after your events.</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="p-4">
-          <div class="bg-warning rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 24px;">2</div>
+          <div class="bg-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow"
+               style="width: 80px; height: 80px; font-size: 24px;">2</div>
           <h5 class="fw-semibold">Students</h5>
           <p class="text-muted">Sign up to view and get alerts for free food nearby.</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="p-4">
-          <div class="bg-warning rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 24px;">3</div>
+          <div class="bg-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow"
+               style="width: 80px; height: 80px; font-size: 24px;">3</div>
           <h5 class="fw-semibold">Reduce Waste</h5>
           <p class="text-muted">Help feed the community and minimize food waste.</p>
         </div>
@@ -57,18 +73,14 @@
     <h3 class="fw-bold mb-3">Join the Campus Food Sharing Community</h3>
     <p class="lead mb-4">Whether you're an event organizer or a student, we’ve got you covered.</p>
     <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="/register?role=organizer" class="btn btn-outline-light btn-lg px-4">I'm an Organizer</a>
+      <a href="/register?role=student" class="btn btn-light text-warning btn-lg px-4">I'm a Student</a>
+    </div>
   </div>
 </section>
 
-
 <!-- Footer -->
-<footer class="footer-section text-center text-white py-3">
+<footer class="footer-section text-center text-white py-3 bg-dark">
   <p class="mb-0">© 2025 CampusEats – Reducing Food Waste on Campus</p>
 </footer>
-
-</div>
 {% endblock %}
-
-
-
-
