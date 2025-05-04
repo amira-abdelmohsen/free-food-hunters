@@ -3,6 +3,14 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
 import db
 from db import insert_user
+import ssl
+import certifi
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from dotenv import load_dotenv
+from twilio.rest import Client
+load_dotenv()
+
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -159,6 +167,40 @@ def debug_events():
     from db import get_all_events
     events = get_all_events()
     return f"Found {len(events)} events:<br><br>" + "<br>".join([f"{e['title']} — {e['pickup_time']} to {e['pickup_end']}" for e in events])
+
+
+
+@app.route("/subscribe", methods=["POST"])
+def subscribe():
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    user_email = session["email"]
+
+    try:
+        client = Client(
+            os.environ["TWILIO_ACCOUNT_SID"],
+            os.environ["TWILIO_AUTH_TOKEN"]
+        )
+
+        verification = client.verify.v2.services(
+            os.environ["TWILIO_VERIFY_SERVICE_SID"]
+        ).verifications.create(
+            channel="email",
+            to=user_email
+        )
+
+        print("Verification SID:", verification.sid)
+        print("Verification Status:", verification.status)
+        return redirect(url_for("dashboard", role="student", subscribed="true"))
+
+    except Exception as e:
+        print("Twilio error:", str(e))
+        return redirect(url_for("dashboard", role="student", error="true"))
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
