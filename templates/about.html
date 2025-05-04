@@ -33,6 +33,15 @@
       <div class="col text-center">
         <h4 class="fw-semibold mb-3">📬 Want to get involved?</h4>
         <p class="text-muted mb-4">Whether you're an organizer, a student, or just passionate about reducing waste, we're excited to have you join us.</p>
+
+          {% if session.email %}
+  <a href="{{ url_for('dashboard', role=session.role) }}" class="btn btn-primary">Sign Up Today</a>
+  {% else %}
+  <a href="{{ url_for('login') }}" class="btn btn-primary">Sign Up Today</a>
+  {% endif %}
+
+        <a href="/dashboard" class="btn btn-primary btn-lg">Sign Up Today</a>
+
         <a href="/dashboard" class="btn btn-primary btn-lg">Sign Up Today</a>
       </div>
     </div>
