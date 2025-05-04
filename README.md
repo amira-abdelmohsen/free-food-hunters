@@ -38,11 +38,8 @@ pip install -r requirements.txt
 4. **Set up .env file**
 SENDGRID_API_KEY=your_sendgrid_key_here
 
-5.**Initialize the database:**
 
-flask --app app.py init-db
-
-6. **Run the app:**
+5. **Run the app:**
 flask --app app.py run
 
 
