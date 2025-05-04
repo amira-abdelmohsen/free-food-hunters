@@ -45,11 +45,22 @@ def submit():
             "allergies": ", ".join(request.form.getlist("allergies")),
             "author_email": session["email"]
         }
+
         from db import insert_event
         insert_event(new_event)
+
+        # ✅ Now the email goes AFTER the event is defined
+        from mail_utils import send_email
+        send_email(
+            to_email="student@myhunter.cuny.edu",  # Replace with real student emails later
+            subject="🍕 New Free Food Alert!",
+            content=f"{new_event['title']} is available at {new_event['location']}.\n\nDetails: {new_event['description']}"
+        )
+
         return redirect(url_for("dashboard", role="organizer"))
 
     return render_template("submit.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -60,6 +71,8 @@ def login():
         valid_domains = ["@hunter.cuny.edu", "@myhunter.cuny.edu"]
         if not any(email.endswith(domain) for domain in valid_domains):
             return render_template("login.html", error="Please use your Hunter College email.")
+        if "email" in session:
+            return redirect(url_for("dashboard", role=session.get("role")))
 
         if email == "admin@myhunter.cuny.edu" and password == "hunter123":
             session["email"] = email
@@ -73,6 +86,8 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if "email" in session:
+        return redirect(url_for("dashboard", role=session.get("role")))
     role = request.args.get("role")
     if request.method == "POST":
         role = request.form["role"]
