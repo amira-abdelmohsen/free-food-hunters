@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Submit Leftover Food{% endblock %}
+
 {% block content %}
 <h2 class="mb-4">Submit Leftover Food</h2>
 
@@ -25,8 +26,8 @@
   </div>
 
   <div class="mb-3">
-    <label for="time_remaining" class="form-label">Time Left Before Disposal</label>
-    <input type="text" class="form-control" id="time_remaining" name="time_remaining" placeholder="e.g. 30 mins" required>
+    <label for="pickup_end" class="form-label">Pickup End Time (While Supplies Last)</label>
+    <input type="time" class="form-control" id="pickup_end" name="pickup_end" required>
   </div>
 
   <div class="mb-3">

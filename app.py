@@ -4,16 +4,12 @@ from datetime import datetime
 import db
 from db import insert_user
 
-
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
-    SECRET_KEY='dev',  # Change this at deployment!
+    SECRET_KEY='dev',
     DATABASE=os.path.join(app.instance_path, 'free-food-app.sqlite')
 )
 
-
-
-# Ensure instance folder exists
 try:
     os.makedirs(app.instance_path)
 except OSError:
@@ -21,20 +17,18 @@ except OSError:
 
 db.init_app(app)
 
-# Custom Jinja filter to convert "14:00" to "02:00 PM"
 @app.template_filter("datetimeformat")
 def datetimeformat(value, format="%I:%M %p"):
     try:
         return datetime.strptime(value, "%H:%M").strftime(format)
     except Exception:
-        return value  # fallback if parsing fails
-
+        return value
 
 @app.route("/")
 def home():
     from db import delete_expired_events
     delete_expired_events()
-    return render_template("index.html")  # Student food feed to be added later
+    return render_template("index.html")
 
 @app.route("/submit", methods=["GET", "POST"])
 def submit():
@@ -47,7 +41,7 @@ def submit():
             "description": request.form["description"],
             "location": request.form["location"],
             "pickup_time": request.form["pickup_time"],
-            "time_remaining": request.form["time_remaining"],
+            "pickup_end": request.form["pickup_end"],
             "allergies": ", ".join(request.form.getlist("allergies")),
             "author_email": session["email"]
         }
@@ -76,7 +70,6 @@ def login():
 
     return render_template("login.html")
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     role = request.args.get("role")
@@ -90,14 +83,12 @@ def register():
         if not any(email.endswith(domain) for domain in valid_domains):
             return render_template("register.html", selected_role=role, error="Please use your Hunter College email.")
 
-        # Save user to DB
         insert_user({
             "email": email,
             "name": name,
             "password": password
         })
 
-        # Log the user in and redirect
         session["email"] = email
         session["role"] = role
         return redirect(url_for("dashboard", role=role))
@@ -123,7 +114,6 @@ def dashboard():
         events = get_all_events()
         return render_template("dashboard-student.html", user=user, events=events)
 
-
 @app.route("/delete/<int:event_id>", methods=["POST"])
 def delete_event_route(event_id):
     if "email" not in session:
@@ -145,8 +135,7 @@ def logout():
 def debug_events():
     from db import get_all_events
     events = get_all_events()
-    return f"Found {len(events)} events:<br><br>" + "<br>".join([f"{e['title']} by {e['author_email']}" for e in events])
-
+    return f"Found {len(events)} events:<br><br>" + "<br>".join([f"{e['title']} — {e['pickup_time']} to {e['pickup_end']}" for e in events])
 
 if __name__ == "__main__":
     app.run(debug=True)

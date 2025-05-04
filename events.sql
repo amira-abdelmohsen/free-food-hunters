@@ -14,7 +14,7 @@ CREATE TABLE events (
   description TEXT NOT NULL,
   location TEXT NOT NULL,
   pickup_time TEXT NOT NULL,
-  time_remaining TEXT NOT NULL,
+  pickup_end TEXT NOT NULL,
   allergies TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (author_email) REFERENCES user(email)
