@@ -11,25 +11,14 @@
       <p class="lead text-muted">
         Connect event organizers with leftover food to hungry students. Reduce waste and feed the community.
       </p>
-      <div class="d-flex gap-3 mt-4">
-        {% if session.email %}
-        <a href="{{ url_for('dashboard', role=session.role) }}" class="btn btn-primary">Get Started</a>
-        {% else %}
-        <a href="{{ url_for('login') }}" class="btn btn-primary">Get Started</a>
-        {% endif %}
-          {% if session.email %}
-  <a href="{{ url_for('dashboard', role=session.role) }}" class="btn btn-outline-secondary">Learn More</a>
-  {% else %}
-  <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Learn More</a>
-  {% endif %}  
-        <a href="/dashboard" class="btn btn-warning btn-lg shadow-sm">Get Started</a>
-        <!-- <a href="{{ url_for('login') }}" class="btn btn-warning btn-lg shadow-sm">Get Started</a> -->
-        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">Learn More</a>
-      </div>
-    </div>
-    <img src="{{ url_for('static', filename='image/lily-banse--YHSwy6uqvk-unsplash.jpg') }}"
-         class="img-fluid rounded shadow-sm" alt="Food Image" style="max-width: 500px;">
-  </div>
+      <div class="mt-4 d-flex gap-3">
+        <a href="{{ url_for('dashboard') if 'email' in session else url_for('login') }}" class="btn btn-warning btn-lg">
+          Get Started
+        </a>
+        <a href="{{ url_for('dashboard') if 'email' in session else url_for('login') }}" class="btn btn-outline-secondary btn-lg">
+          Learn More
+        </a>
+      </div>      
 </section>
 
 <!-- How It Works Section -->
