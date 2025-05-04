@@ -144,7 +144,7 @@ def logout():
     session.clear()
     return redirect(url_for("home"))
 
-// TODO: REMOVE AFTER TESTING
+#// TODO: REMOVE AFTER TESTING
 @app.route("/debug-events")
 def debug_events():
     from db import get_all_events
