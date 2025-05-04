@@ -70,6 +70,7 @@ def login():
 
     return render_template("login.html")
 
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     role = request.args.get("role")
@@ -78,22 +79,34 @@ def register():
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
+        error = None
 
         valid_domains = ["@hunter.cuny.edu", "@myhunter.cuny.edu"]
         if not any(email.endswith(domain) for domain in valid_domains):
-            return render_template("register.html", selected_role=role, error="Please use your Hunter College email.")
+            error = "Please use your Hunter College email."
+        elif not name:
+            error = "Name is required."
+        elif not password:
+            error = "Password is required."
 
-        insert_user({
-            "email": email,
-            "name": name,
-            "password": password
-        })
+        if error is None:
+            try:
+                from db import insert_user
+                insert_user({
+                    "email": email,
+                    "name": name,
+                    "password": password
+                })
+                session["email"] = email
+                session["role"] = role
+                return redirect(url_for("dashboard", role=role))
+            except Exception as e:
+                error = f"Registration failed: {e}"
 
-        session["email"] = email
-        session["role"] = role
-        return redirect(url_for("dashboard", role=role))
+        return render_template("register.html", selected_role=role, error=error)
 
     return render_template("register.html", selected_role=role)
+
 
 @app.route("/dashboard")
 def dashboard():
@@ -131,6 +144,7 @@ def logout():
     session.clear()
     return redirect(url_for("home"))
 
+// TODO: REMOVE AFTER TESTING
 @app.route("/debug-events")
 def debug_events():
     from db import get_all_events
