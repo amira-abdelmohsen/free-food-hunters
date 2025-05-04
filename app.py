@@ -1,3 +1,5 @@
+'''Free Food Finder application'''
+
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
@@ -11,7 +13,7 @@ from dotenv import load_dotenv
 from twilio.rest import Client
 load_dotenv()
 
-
+# App initialization and configuration
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
     SECRET_KEY='dev',
@@ -19,7 +21,6 @@ app.config.from_mapping(
 )
 
 # Ensure database exists on first run
-
 os.makedirs(app.instance_path, exist_ok=True)
 db_path = app.config["DATABASE"]
 if not os.path.exists(db_path):
@@ -34,12 +35,14 @@ def datetimeformat(value, format="%I:%M %p"):
     except Exception:
         return value
 
+# Home/Start page definition
 @app.route("/")
 def home():
     from db import delete_expired_events
     delete_expired_events()
     return render_template("index.html")
 
+# Event submission definition
 @app.route("/submit", methods=["GET", "POST"])
 def submit():
     if "email" not in session:
@@ -71,7 +74,6 @@ def submit():
 
     return render_template("submit.html")
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -97,7 +99,6 @@ def login():
             return render_template("login.html", error="Invalid email or password.")
 
     return render_template("login.html")
-
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -138,7 +139,7 @@ def register():
 
     return render_template("register.html", selected_role=role)
 
-
+# Dashboard definition
 @app.route("/dashboard")
 def dashboard():
     if "email" not in session:
@@ -158,6 +159,7 @@ def dashboard():
         events = get_all_events()
         return render_template("dashboard-student.html", user=user, events=events)
 
+# Delete event button definition
 @app.route("/delete/<int:event_id>", methods=["POST"])
 def delete_event_route(event_id):
     if "email" not in session:
@@ -166,16 +168,18 @@ def delete_event_route(event_id):
     delete_event(event_id)
     return redirect(url_for("dashboard", role="organizer"))
 
+# About page definition
 @app.route("/about")
 def about():
     return render_template("about.html")
 
+# Logout function definition
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("home"))
 
-
+#
 @app.route("/debug-events")
 def debug_events():
     from db import get_all_events
@@ -184,6 +188,7 @@ def debug_events():
 
 
 
+# Push email notification subscription definition
 @app.route("/subscribe", methods=["POST"])
 def subscribe():
     if "email" not in session:
@@ -212,9 +217,6 @@ def subscribe():
         print("Twilio error:", str(e))
         return redirect(url_for("dashboard", role="student", error="true"))
 
-
-
-
-
+# Program start
 if __name__ == "__main__":
     app.run(debug=True)

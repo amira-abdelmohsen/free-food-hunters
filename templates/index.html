@@ -12,7 +12,6 @@
         Connect event organizers with leftover food to hungry students. Reduce waste and feed the community.
       </p>
       <div class="d-flex gap-3 mt-4">
-<<<<<<< HEAD
         {% if session.email %}
         <a href="{{ url_for('dashboard', role=session.role) }}" class="btn btn-primary">Get Started</a>
         {% else %}
@@ -23,11 +22,9 @@
   {% else %}
   <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Learn More</a>
   {% endif %}  
-=======
         <a href="/dashboard" class="btn btn-warning btn-lg shadow-sm">Get Started</a>
         <!-- <a href="{{ url_for('login') }}" class="btn btn-warning btn-lg shadow-sm">Get Started</a> -->
         <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">Learn More</a>
->>>>>>> 2f7299b618300bae08d33a8ddafb372d69e5427a
       </div>
     </div>
     <img src="{{ url_for('static', filename='image/lily-banse--YHSwy6uqvk-unsplash.jpg') }}"
